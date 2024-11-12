@@ -68,28 +68,64 @@ function updateDots(imageIndex) {
 }
 
 function renderImage (i) {
+  console.log(i);
   const imagesURL = images().getImages();
-  i = i % (imagesURL.length);
   updateDots(i);
   images().setCurrentImage(imagesURL[i], i);
 }
 
-function handleNextPrev () {
-  let curr = 0;
+function index () {
+  let i = 0;
+
+  function getIndex() {
+    return i;
+  }
+
+  function setIndex(x) {
+    i = x;
+  }
+
+  function getAndAdvance(isIncrement=false) {
+    if (isIncrement) {
+      i = (i + 1) % (images().getLength());
+    } else {
+      i = (i - 1 + images().getLength()) % images().getLength();
+    }
+    return i;
+  }
+
+  return {
+    getIndex, 
+    setIndex, 
+    getAndAdvance,
+  }
+}
+function handleClickables () {
+  const curr = index();
 
   nextBtn.addEventListener('click', () => {
-    renderImage(++curr);
+    renderImage(curr.getAndAdvance(true))
   })
 
   prevBtn.addEventListener('click', () => {
-    renderImage(--curr);
+    renderImage(curr.getAndAdvance())
+  })
+
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const dotIndex = dot.classList[1].split("-")[1];
+      curr.setIndex(parseInt(dotIndex));
+      renderImage(parseInt(dotIndex));
+    })
   })
 
 }
 
 function start () {
-  handleNextPrev();
-  addDots(images().getLength());
+  const pics = images();
+  addDots(pics.getLength());
+  handleClickables();
 }
 
 start();

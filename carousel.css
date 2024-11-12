@@ -21,6 +21,8 @@ body {
 
 .outer-frame {
   position: relative;
+  border: 10px solid gold;
+  border-radius: 3px;
 }
 
 .dots {
@@ -29,6 +31,10 @@ body {
   bottom: 10%;
   left: 50%;
   display: flex;
+}
+
+.dot:hover {
+  transform: scale(1.1);
 }
 
 .dot::after {
